@@ -4,6 +4,8 @@ import (
 	"fmt"
 	"os"
 
+	"base_service/internal/api/grpc"
+
 	"github.com/spf13/cobra"
 )
 
@@ -11,7 +13,7 @@ var rootCmd = &cobra.Command{
 	Use:   "start",
 	Short: "start the server",
 	Run: func(cmd *cobra.Command, args []string) {
-		// Do Stuff Here
+		grpc.Register(":5001")
 	},
 }
 

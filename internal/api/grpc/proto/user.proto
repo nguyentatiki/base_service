@@ -1,0 +1,22 @@
+syntax = "proto3";
+
+option go_package = "base_service/internal/grpc";
+
+package user;
+
+// The greeting service definition.
+service UserService {
+  // Sends a greeting
+  rpc Login (LoginRequest) returns (LoginResponse) {}
+}
+
+// The request message containing the user's name.
+message LoginRequest {
+  string username = 1;
+  string password = 2;
+}
+
+// The response message containing the greetings
+message LoginResponse {
+  string message = 1;
+}

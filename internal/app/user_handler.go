@@ -2,9 +2,9 @@
 package app
 
 import (
-	"base_service/internal/domain/models"
+	"base_service/internal/domain/entities"
 )
 
-func Login(user *models.User) {
+func GetUser(user *entities.User) {
 
 }

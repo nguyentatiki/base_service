@@ -1,7 +1,7 @@
 //Include models that involved in business flow
-package models
+package entities
 
 type User struct {
-	Name  string
-	Email string
+	Username string
+	Email    string
 }
