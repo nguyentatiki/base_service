@@ -7,16 +7,17 @@ package user;
 // The greeting service definition.
 service UserService {
   // Sends a greeting
-  rpc Login (LoginRequest) returns (LoginResponse) {}
+  rpc GetUser (GetUserRequest) returns (GetUserResponse) {}
 }
 
 // The request message containing the user's name.
-message LoginRequest {
+message GetUserRequest {
   string username = 1;
-  string password = 2;
 }
 
 // The response message containing the greetings
-message LoginResponse {
-  string message = 1;
+message GetUserResponse {
+  string username = 1;
+  string email = 2;
+  string phone = 3;
 }

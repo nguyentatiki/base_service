@@ -2,6 +2,7 @@
 package entities
 
 type User struct {
-	Username string
-	Email    string
+	Username    string
+	Email       string
+	PhoneNumber string
 }

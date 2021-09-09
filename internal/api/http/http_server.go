@@ -1,5 +1,5 @@
 package http
 
 func Listen(port int) {
-	//Start server that listen on port
+	//start a http server here
 }
