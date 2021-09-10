@@ -1,49 +1,35 @@
 package grpc
 
 import (
-	"context"
 	"log"
 	"net"
-	"os"
 
 	pb "base_service/internal/api/grpc/proto"
-	"base_service/internal/app"
-	"base_service/internal/domain/entities"
-	"base_service/internal/infrastructure/persistent"
+	app "base_service/internal/application"
 
-	"github.com/jmoiron/sqlx"
 	"google.golang.org/grpc"
 )
 
-type server struct {
+type Server struct {
 	pb.UnimplementedUserServiceServer
-	db *sqlx.DB
+	handler *app.UserHandler
 }
 
-// Login implements grpc.Login
-func (s *server) GetUser(ctx context.Context, in *pb.GetUserRequest) (*pb.GetUserResponse, error) {
-	log.Printf("Received: %v", in.GetUsername())
-	repo := persistent.NewUserRepository(s.db)
-	user, err := app.NewUserHandler(repo).GetUser(&entities.User{Username: in.Username})
-	if err != nil {
-		return nil, err
-	}
-	return &pb.GetUserResponse{Username: user.Username, Email: user.Email, Phone: user.PhoneNumber}, nil
+func NewServer(handler *app.UserHandler) *Server {
+	return &Server{handler: handler}
 }
 
-func Register(port string) {
+func Register(port string, server *Server) {
 	lis, err := net.Listen("tcp", port)
 	if err != nil {
 		log.Fatalf("failed to listen: %v", err)
 	}
-	conn := os.Getenv("MYSQL_CONNECTION")
-	db, err := sqlx.Connect("mysql", conn)
 
 	if err != nil {
 		log.Fatalf("failed to connect: %v", err)
 	}
 	s := grpc.NewServer()
-	pb.RegisterUserServiceServer(s, &server{db: db})
+	pb.RegisterUserServiceServer(s, server)
 	log.Printf("server listening at %v", lis.Addr())
 	if err := s.Serve(lis); err != nil {
 		log.Fatalf("failed to serve: %v", err)

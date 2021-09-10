@@ -5,7 +5,7 @@ WORKDIR /app
 COPY go.mod ./
 COPY go.sum ./
 RUN go mod download
-
+RUN make install && make generate-proto
 COPY *.go ./
 
 RUN go build -o /server
