@@ -19,6 +19,6 @@ func NewUserRepository(db *sqlx.DB) interfaces.UserRepository {
 
 func (repo *UserRepository) GetUser(username string) (*entities.User, error) {
 	user := entities.User{}
-	err := repo.Get(&user, "SELECT * FROM users WHERE username=?", username)
+	err := repo.Get(&user, "SELECT * FROM user WHERE username=?", username)
 	return &user, err
 }
