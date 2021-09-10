@@ -7,5 +7,4 @@ migrate-up:
 	migrate -path=migrations -database=mysql://"$(MYSQL_CONNECTION)" up
 
 install:
-	go install google.golang.org/protobuf/cmd/protoc-gen-go
-	go install google.golang.org/grpc/cmd/protoc-gen-go-grpc
+	sh install.sh
