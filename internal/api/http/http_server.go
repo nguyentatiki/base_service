@@ -1,25 +1,21 @@
 package http
 
 import (
-	"net/http"
+	app "base_service/internal/application"
 
-	"github.com/gorilla/mux"
+	"github.com/gin-gonic/gin"
 )
 
-func Listen(port string) {
-	r := mux.NewRouter()
-	// IMPORTANT: you must specify an OPTIONS method matcher for the middleware to set CORS headers
-	r.HandleFunc("/users", userHandler).Methods(http.MethodGet)
-	r.Use(mux.CORSMethodMiddleware(r))
-
-	http.ListenAndServe(port, r)
+type Server struct {
+	handler *app.UserHandler
 }
 
-func userHandler(w http.ResponseWriter, r *http.Request) {
-	w.Header().Set("Access-Control-Allow-Origin", "*")
-	if r.Method == http.MethodOptions {
-		return
-	}
+func NewServer(handler *app.UserHandler) *Server {
+	return &Server{handler: handler}
+}
 
-	w.Write([]byte("foo"))
+func Listen(port string, s *Server) {
+	r := gin.Default()
+	r.POST("/users", s.userHandler)
+	r.Run(port) // listen and serve on 0.0.0.0:8080 (for windows "localhost:8080")
 }

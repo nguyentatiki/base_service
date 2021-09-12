@@ -17,17 +17,12 @@ var rootCmd = &cobra.Command{
 	Short: "start the server",
 	Run: func(cmd *cobra.Command, args []string) {
 		protocol := os.Getenv("PROTOCOL")
+		db := database.Open()
+		container := internal.InitializeContainer(db)
 		if protocol == "http" {
-			http.Listen(":5000")
+			http.Listen(":5000", container.HttpServer)
 		} else {
-			db := database.Open()
-			//conn := os.Getenv("MYSQL_CONNECTION")
-			//db, err := sqlx.Connect("mysql", conn)
-			// if err != nil {
-			// 	panic(err)
-			// }
-			s := internal.InitializeContainer(db)
-			grpc.Register(":5001", s)
+			grpc.Register(":5001", container.GrpcServer)
 		}
 	},
 }

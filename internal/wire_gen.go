@@ -7,7 +7,9 @@
 package internal
 
 import (
+	"base_service/internal/api"
 	"base_service/internal/api/grpc"
+	"base_service/internal/api/http"
 	"base_service/internal/application"
 	"base_service/internal/infrastructure/persistent"
 	"github.com/google/wire"
@@ -16,17 +18,21 @@ import (
 
 // Injectors from wire.go:
 
-func InitializeContainer(db *sqlx.DB) *grpc.Server {
+func InitializeContainer(db *sqlx.DB) *api.ApiContainer {
 	userRepository := persistent.NewUserRepository(db)
 	userHandler := app.NewUserHandler(userRepository)
-	server := grpc.NewServer(userHandler)
-	return server
+	server := http.NewServer(userHandler)
+	grpcServer := grpc.NewServer(userHandler)
+	apiContainer := api.NewApiContainer(server, grpcServer)
+	return apiContainer
 }
 
 // wire.go:
 
-var ApiSet = wire.NewSet(grpc.NewServer)
+var container = wire.NewSet(api.NewApiContainer)
 
-var Reposet = wire.NewSet(persistent.NewUserRepository)
+var apiSet = wire.NewSet(grpc.NewServer, http.NewServer)
 
-var HandlerSet = wire.NewSet(app.NewUserHandler)
+var reposet = wire.NewSet(persistent.NewUserRepository)
+
+var handlerSet = wire.NewSet(app.NewUserHandler)

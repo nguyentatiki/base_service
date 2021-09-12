@@ -1,9 +1,12 @@
 //go:build wireinject
+// +build wireinject
 
 package internal
 
 import (
+	"base_service/internal/api"
 	"base_service/internal/api/grpc"
+	"base_service/internal/api/http"
 	app "base_service/internal/application"
 	"base_service/internal/infrastructure/persistent"
 
@@ -11,19 +14,24 @@ import (
 	"github.com/jmoiron/sqlx"
 )
 
-var ApiSet = wire.NewSet(
-	grpc.NewServer,
+var container = wire.NewSet(
+	api.NewApiContainer,
 )
 
-var Reposet = wire.NewSet(
+var apiSet = wire.NewSet(
+	grpc.NewServer,
+	http.NewServer,
+)
+
+var reposet = wire.NewSet(
 	persistent.NewUserRepository,
 )
 
-var HandlerSet = wire.NewSet(
+var handlerSet = wire.NewSet(
 	app.NewUserHandler,
 )
 
-func InitializeContainer(db *sqlx.DB) *grpc.Server {
-	wire.Build(HandlerSet, Reposet, ApiSet)
-	return &grpc.Server{}
+func InitializeContainer(db *sqlx.DB) *api.ApiContainer {
+	wire.Build(handlerSet, reposet, apiSet, container)
+	return &api.ApiContainer{}
 }

@@ -22,11 +22,6 @@ func Open() *sqlx.DB {
 		fmt.Printf("Error Opening DB: %v \n", err)
 	}
 
-	err = db.Ping()
-	if err != nil {
-		fmt.Printf("Error Pinging DB: %v \n", err)
-	}
-
 	fmt.Println("Connected to db!")
 
 	return db
