@@ -4,6 +4,7 @@ go 1.17
 
 require (
 	github.com/go-sql-driver/mysql v1.6.0
+	github.com/golang-migrate/migrate/v4 v4.14.1
 	github.com/golang/protobuf v1.5.2
 	github.com/google/wire v0.5.0
 	github.com/gorilla/mux v1.8.0
@@ -20,6 +21,11 @@ require (
 )
 
 require (
+	github.com/containerd/containerd v1.5.5 // indirect
+	github.com/docker/docker v20.10.8+incompatible // indirect
 	github.com/google/go-cmp v0.5.6 // indirect
+	github.com/hashicorp/errwrap v1.0.0 // indirect
+	github.com/hashicorp/go-multierror v1.1.0 // indirect
+	github.com/moby/term v0.0.0-20200312100748-672ec06f55cd // indirect
 	google.golang.org/protobuf v1.27.1 // indirect
 )
