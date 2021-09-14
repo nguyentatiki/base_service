@@ -1,6 +1,27 @@
 version: '3.1'
 
 services:
+  server-http:
+    build: .
+    image: server
+    ports:
+      - 5000:5000
+    environment:
+      MYSQL_CONNECTION: root:admin@tcp(db:3306)/baseservices?tls=skip-verify&autocommit=true
+      PROTOCOL: http
+    depends_on:
+      - db
+
+  server-grpc:
+    build: .
+    image: server
+    ports:
+      - 5001:5001
+    environment:
+      MYSQL_CONNECTION: root:admin@tcp(db:3306)/baseservices?tls=skip-verify&autocommit=true
+      PROTOCOL: grpc
+    depends_on:
+      - db
 
   db:
     image: mysql
@@ -8,7 +29,7 @@ services:
     restart: always
     environment:
       MYSQL_ROOT_PASSWORD: admin
-    ports: 
+    ports:
       - 3306:3306
 
   adminer:

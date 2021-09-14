@@ -12,7 +12,9 @@ import (
 	"github.com/spf13/cobra"
 )
 
-var rootCmd = &cobra.Command{
+var rootCmd = &cobra.Command{}
+
+var startCmd = &cobra.Command{
 	Use:   "start",
 	Short: "start the server",
 	Run: func(cmd *cobra.Command, args []string) {
@@ -28,6 +30,7 @@ var rootCmd = &cobra.Command{
 }
 
 func Execute() {
+	rootCmd.AddCommand(startCmd)
 	if err := rootCmd.Execute(); err != nil {
 		fmt.Fprintln(os.Stderr, err)
 		os.Exit(1)
